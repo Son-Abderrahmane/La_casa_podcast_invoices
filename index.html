@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de Facture Professionnelle</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <section class="form-section">
+            <h2>Détails de la Facture</h2>
+            <form id="invoice-form">
+                <div class="form-group">
+                    <label>Logo de l'entreprise</label>
+                    <input type="file" id="logo-input" accept="image/*">
+                </div>
+                <div class="grid-2">
+                    <input type="text" id="company-name" placeholder="Nom de l'entreprise" value="LA CASA PODCAST" required>
+                    <input type="text" id="company-ice" placeholder="ICE de l'entreprise" value="0003417200000060" required>
+                </div>
+                <textarea id="company-address" placeholder="Adresse complète" required>GROUPE ATTAKADDOUM GH2-17-ÉTAGE 2, 20600 Casablanca</textarea>
+                
+                <hr>
+                
+                <div class="grid-2">
+                    <input type="text" id="client-name" placeholder="Nom du Client / Entreprise" required>
+                    <input type="text" id="client-ice" placeholder="ICE Client (Optionnel)">
+                </div>
+                <input type="text" id="invoice-date" placeholder="Date (ex: 14/04/2026)" value="14/04/2026">
+                
+                <hr>
+                
+                <h3>Articles / Services</h3>
+                <div id="items-container">
+                    </div>
+                <button type="button" id="add-item-btn" class="btn-secondary">+ Ajouter une ligne</button>
+                
+                <div class="actions">
+                    <button type="button" id="download-pdf" class="btn-primary">Télécharger PDF</button>
+                    <button type="button" id="print-invoice" class="btn-secondary">Imprimer</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="preview-section">
+            <div id="invoice-template" class="invoice-box">
+                <div class="invoice-header">
+                    <div class="header-left">
+                        <img id="preview-logo" src="" alt="Logo" class="hidden">
+                        <div id="preview-company-name" class="company-title">LA CASA PODCAST</div>
+                        <p id="preview-company-address">GROUPE ATTAKADDOUM GH2-17-ÉTAGE 2, 20600 Casablanca</p>
+                        <p>ICE: <span id="preview-company-ice">0003417200000060</span></p>
+                    </div>
+                    <div class="header-right">
+                        <div class="facture-label">FACTURE</div>
+                        <p>Date: <span id="preview-date">14/04/2026</span></p>
+                    </div>
+                </div>
+
+                <div class="client-info">
+                    <strong>Adressé à:</strong>
+                    <p id="preview-client-name"></p>
+                    <p id="preview-client-ice-row">ICE: <span id="preview-client-ice"></span></p>
+                </div>
+
+                <table class="items-table">
+                    <thead>
+                        <tr>
+                            <th>Désignation</th>
+                            <th>TVA</th>
+                            <th>P.U. HT</th>
+                            <th>Qté</th>
+                            <th>Total HT</th>
+                        </tr>
+                    </thead>
+                    <tbody id="preview-items-body">
+                        </tbody>
+                </table>
+
+                <div class="footer-container">
+                    <div class="payment-method">
+                        <p>Mode de règlement: <strong>Espèces</strong></p>
+                        <p class="amount-word" id="preview-amount-word"></p>
+                    </div>
+                    <div class="totals-table">
+                        <div class="total-row">
+                            <span>Total HT</span>
+                            <span id="preview-total-ht">0,00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Total TVA 20%</span>
+                            <span id="preview-total-tva">0,00</span>
+                        </div>
+                        <div class="total-row bold-ttc">
+                            <span>Total TTC (MAD)</span>
+                            <span id="preview-total-ttc">0,00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="legal-footer">
+                    <p id="preview-footer-legal">R.C: 616731 - LF: 60257781 - C.N.S.S: 5521173 - I.C.E: 0003417200000060</p>
+                    <p>Powered by Fingo</p>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
