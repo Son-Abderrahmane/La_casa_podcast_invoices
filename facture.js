@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (dateInput) dateInput.value = formattedDate;
 
     // --- 2. SET YOUR LOCAL LOGO AS DEFAULT (iOS FIX) ---
-    fetch('la-casa-podcaast-logo.png')
+    fetch('../la-casa-podcaast-logo.png')
         .then(response => {
             if (!response.ok) throw new Error("Network response was not ok");
             return response.blob();
