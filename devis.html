@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Générateur de Facture Professionnelle</title>
-    <link rel="stylesheet" href="facture.css">
+    <link rel="stylesheet" href="devis.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
     <div class="app-container">
         <section class="form-section">
-            <a href="devis.html" class="back-link">&larr; Créer un Devis</a>
-            <h2>Détails de la Facture</h2>
+                <a href="index.html" class="back-link">&larr; Créer une Facture</a>
+            <h2>Détails de Devis</h2>
             <form id="invoice-form">
                 <div class="form-group">
                     <label>Logo de l'entreprise</label>
@@ -55,7 +55,7 @@
                         <p>ICE: <span id="preview-company-ice">002780122000059</span></p>
                     </div>
                     <div class="header-right">
-                        <div class="facture-label">FACTURE</div>
+                        <div class="facture-label">DEVIS</div>
                         <p>Date: <span id="preview-date">14/04/2026</span></p>
                     </div>
                 </div>
@@ -110,6 +110,6 @@
             </div>
         </section>
     </div>
-    <script src="facture.js"></script>
+    <script src="devis.js"></script>
 </body>
 </html>
