@@ -15,9 +15,24 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (dateInput) dateInput.value = formattedDate;
 
-    // --- 2. SET YOUR LOCAL LOGO AS DEFAULT ---
-    previewLogo.src = 'la-casa-podcaast-logo.png'; 
-    previewLogo.classList.remove('hidden');
+    // --- 2. SET YOUR LOCAL LOGO AS DEFAULT (iOS FIX) ---
+    fetch('la-casa-podcaast-logo.png')
+        .then(response => {
+            if (!response.ok) throw new Error("Network response was not ok");
+            return response.blob();
+        })
+        .then(blob => {
+            const reader = new FileReader();
+            reader.onload = function() {
+                previewLogo.src = reader.result;
+                previewLogo.classList.remove('hidden');
+            };
+            reader.readAsDataURL(blob);
+        })
+        .catch(error => {
+            console.warn('Could not load default logo. Hiding to prevent PDF crash on iOS:', error);
+            previewLogo.classList.add('hidden');
+        });
 
     // Initialize logic
     createItemRow();
@@ -108,46 +123,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // PDF Export with high quality
-// Find the download-pdf event listener in script.js and replace it with this:
-document.getElementById('download-pdf').addEventListener('click', () => {
-    const element = document.getElementById('invoice-template');
-    
-    // 1. Temporarily disable scaling for a clean capture
-    const originalTransform = element.style.transform;
-    element.style.transform = "none";
+    document.getElementById('download-pdf').addEventListener('click', () => {
+        const element = document.getElementById('invoice-template');
+        
+        // 1. Temporarily disable scaling for a clean capture
+        const originalTransform = element.style.transform;
+        element.style.transform = "none";
 
-    const opt = {
-        margin: 0,
-        filename: `Facture_${document.getElementById('client-name').value || 'LA_CASA'}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { 
-            scale: 2, 
-            useCORS: true, 
-            logging: false,
-            y: 0,
-            scrollY: 0,
-            windowHeight: element.scrollHeight // Captures only the actual content height
-        },
-        jsPDF: { 
-            unit: 'mm', 
-            format: 'a4', 
-            orientation: 'portrait',
-            compress: true
-        },
-        // This forces the library to NOT create a new page
-        pagebreak: { mode: 'avoid-all' } 
-    };
+        const opt = {
+            margin: 0,
+            filename: `Facture_${document.getElementById('client-name').value || 'LA_CASA'}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { 
+                scale: 2, 
+                useCORS: true, 
+                logging: false,
+                y: 0,
+                scrollY: 0,
+                windowHeight: element.scrollHeight // Captures only the actual content height
+            },
+            jsPDF: { 
+                unit: 'mm', 
+                format: 'a4', 
+                orientation: 'portrait',
+                compress: true
+            },
+            // This forces the library to NOT create a new page
+            pagebreak: { mode: 'avoid-all' } 
+        };
 
-    // 2. Generate
-    html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
-        // Double check: if there is more than 1 page, delete the others
-        const totalPages = pdf.internal.getNumberOfPages();
-        for (let i = totalPages; i > 1; i--) {
-            pdf.deletePage(i);
-        }
-    }).save().then(() => {
-        // 3. Restore the screen scaling
-        element.style.transform = originalTransform;
+        // 2. Generate
+        html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
+            // Double check: if there is more than 1 page, delete the others
+            const totalPages = pdf.internal.getNumberOfPages();
+            for (let i = totalPages; i > 1; i--) {
+                pdf.deletePage(i);
+            }
+        }).save().then(() => {
+            // 3. Restore the screen scaling
+            element.style.transform = originalTransform;
+        });
     });
-});
 });
